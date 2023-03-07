@@ -1,0 +1,7 @@
+.table td {text-align: center;}
+.year{font-size: 44px;}
+.previousyear, .nextyear{cursor: pointer;}
+.yellow{color: #FFC300;font-weight: bold;cursor: pointer;}
+.purple{color: #A020F0;font-weight: bold;cursor: pointer;}
+.skye{color: #87CEEB;font-weight: bold;cursor: pointer;}
+.holiday{color: red; font-weight: bold;}
