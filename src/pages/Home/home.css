@@ -5,3 +5,12 @@
 .purple{color: #A020F0;font-weight: bold;cursor: pointer;}
 .skye{color: #87CEEB;font-weight: bold;cursor: pointer;}
 .holiday{color: red; font-weight: bold;}
+.green{background-color: green !important}
+.clddates{cursor: pointer;}
+.schedulemodel{float: left;margin-left: 6% !important;}
+.addTodo{width: 100%;margin-top: 10px;}
+.delteTodo{cursor: pointer;color: red;}
+.todo-details{width: 100%;}
+.schedulemodel .modal-content{width: 80%;}
+.todoRow{margin-bottom: 10px;}
+.schedules{font-weight: bold;}

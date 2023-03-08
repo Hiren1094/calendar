@@ -52,8 +52,7 @@ export function Dayes(Details) {
     return (
         <>
 
-            {
-                getDays().map((daysDetails,index) => {
+            {  getDays().map((daysDetails,index) => {
                     
                     var daysClass = '';
                     if(daysDetails === 'SUN'){

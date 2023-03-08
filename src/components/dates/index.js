@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Dayes } from '../dayes';
+import { TodoList } from '../TodoList';
+
 export function Dates(Details) {
 
     const {YearsState, Month} = Details;
     const [dates, setDates] = useState([]);
+    const [modalShow, setModalShow] = React.useState(false);
     const nowMonth = new Date(YearsState, Month, 0).getDate();
+    const [todoDetails, settodoDetails] = useState('');
+    const [Todos, setTodos] = useState([]);
+    const [scheduleDate, setscheduleDate] = useState('');
+
     // Set days of the year.
     useEffect(() => {
         let datesOfYear = [];
@@ -61,29 +68,72 @@ export function Dates(Details) {
         return t;
     }
 
+    // Set Model.
+    
+    const handleClose = () => setModalShow(false);
+
+    const handleShow = (getscheduleDate) => {
+        setscheduleDate(getscheduleDate);
+        setModalShow(true);
+    }
+
     return (
         <>  
             
             {transpose(sliceIntoChunks(dates, 7)) && transpose(sliceIntoChunks(dates, 7)).map((date, i) => {
                 
+                const Currentdate = new Date();
+
+                let Currentday = Currentdate.getDate();
+                let Currentmonth = Currentdate.getMonth() + 1;
+                let Currentyear = Currentdate.getFullYear();
+
                 return (
                     <>
                         <tr key={i}>
+
                             {date.map((getdate, index) => {
-                                var dateClass = '';
-                                if (getdate === nowMonth && getdate === 29) {
-                                    dateClass = 'yellow';
-                                } else if (getdate === nowMonth && getdate === 30) {
-                                    dateClass = 'purple';
-                                } else if (getdate === nowMonth && getdate === 31) {
-                                    dateClass = 'skye';
-                                } else if (getdate === nowMonth && getdate === 28) {
-                                    dateClass = 'yellow';
-                                } else {
-                                    dateClass = '';
+                                
+                                var dateClass = 'clddates';
+                                var currentdateCls = '';
+                                var scheduleCls = '';    
+                                // Highligh current date.
+
+                                if(Currentday === getdate && Month === Currentmonth && YearsState === Currentyear){
+
+                                    currentdateCls = 'green';
                                 }
+
+                                // Highligh last month.
+
+                                if (getdate === nowMonth && getdate === 29) {
+                                    dateClass = 'yellow clddates';
+                                } else if (getdate === nowMonth && getdate === 30) {
+                                    dateClass = 'purple clddates';
+                                } else if (getdate === nowMonth && getdate === 31) {
+                                    dateClass = 'skye clddates';
+                                } else if (getdate === nowMonth && getdate === 28) {
+                                    dateClass = 'yellow clddates';
+                                } else {
+                                    dateClass = 'clddates';
+                                }
+                                
+                                // Higlighted schedule date.
+                                
+                                if( Todos.length > 0 ){
+
+                                    Todos.map((existingTodo) => {
+                                        if( existingTodo.date === getdate && Month === existingTodo.month && YearsState === existingTodo.year ){
+                                            scheduleCls = 'schedules';
+                                            return scheduleCls;
+                                        }else{
+                                            return '';
+                                        }
+                                    })
+                                }
+
                                 return (
-                                    <td key={index.toString()} className={dateClass}>{getdate}</td>
+                                    <td onClick={() => handleShow(getdate)} key={index.toString()} className={`${dateClass} ${currentdateCls} ${scheduleCls}`}>{getdate}</td>
                                 )
                             })}
                             {nowMonth === 28 && <td></td>}
@@ -92,6 +142,9 @@ export function Dates(Details) {
                     </>
                 )
             })}
+
+                
+            <TodoList YearsState={YearsState} Month={Month} scheduleDate={scheduleDate} setTodos={setTodos} Todos={Todos} modalShow={modalShow} handleClose={handleClose} settodoDetails={settodoDetails} todoDetails={todoDetails} />
         </>
     );
 }
