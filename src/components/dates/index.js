@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dayes } from '../dayes';
 import { TodoList } from '../TodoList';
+import axios from 'axios';
 
 export function Dates(Details) {
 
@@ -11,7 +12,7 @@ export function Dates(Details) {
     const [todoDetails, settodoDetails] = useState('');
     const [Todos, setTodos] = useState([]);
     const [scheduleDate, setscheduleDate] = useState('');
-
+    
     // Set days of the year.
     useEffect(() => {
         let datesOfYear = [];
@@ -22,8 +23,42 @@ export function Dates(Details) {
         }
 
         setDates(datesOfYear);
+
+        // Get all schedule details.
+        let fetchTodo = [];
+        async function fetchData() {
+
+            const API_URL = `${process.env.REACT_APP_API}/api/task`;
+            
+            await axios.get(API_URL).then(function (response) {
+                
+                if (response.data.length > 0) {
+                    
+                    response.data.forEach((todoList,index) => {
+
+                        // setTodos(result => [...result, { id: todoList.id, date: todoList.todo_date, year: todoList.todo_year, month: todoList.todo_month, task: todoList.task_name }]);
+
+                        fetchTodo.push({ id: todoList.id, date: todoList.todo_date, year: todoList.todo_year, month: todoList.todo_month, task: todoList.task_name });
+                       
+                    });
+                    
+                } else {
+                    alert('Oops!something went wrong during get schedule details.');
+                }
+    
+            }).catch(function (error) {
+                
+                alert('Oops!something went wrong during get schedule details.');
+            });
+
+            setTodos( result => fetchTodo);
+        }
+        
+        fetchData();
+        
     }, [nowMonth]);
 
+    
     // Return chunk of dates.
     function sliceIntoChunks(arr, chunkSize) {
         const res = [];
@@ -76,7 +111,7 @@ export function Dates(Details) {
         setscheduleDate(getscheduleDate);
         setModalShow(true);
     }
-
+    // console.log(Todos);
     return (
         <>  
             
@@ -121,9 +156,10 @@ export function Dates(Details) {
                                 // Higlighted schedule date.
                                 
                                 if( Todos.length > 0 ){
-
+                                    
                                     Todos.map((existingTodo) => {
-                                        if( existingTodo.date === getdate && Month === existingTodo.month && YearsState === existingTodo.year ){
+                                        
+                                        if( Number(existingTodo.date) === getdate && Month === Number(existingTodo.month) && YearsState === Number(existingTodo.year) ){
                                             scheduleCls = 'schedules';
                                             return scheduleCls;
                                         }else{
