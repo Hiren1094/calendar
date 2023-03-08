@@ -42,8 +42,6 @@ export function Dates(Details) {
                        
                     });
                     
-                } else {
-                    alert('Oops!something went wrong during get schedule details.');
                 }
     
             }).catch(function (error) {
